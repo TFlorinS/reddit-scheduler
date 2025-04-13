@@ -22,6 +22,9 @@ def init_db():
     conn.commit()
     conn.close()
 
+# Run this always so Heroku initializes the DB
+init_db()
+
 @app.route('/')
 def index():
     conn = sqlite3.connect('posts.db')
@@ -52,5 +55,4 @@ def schedule():
     return render_template('schedule.html')
 
 if __name__ == '__main__':
-    init_db()
     app.run(debug=True)
