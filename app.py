@@ -19,6 +19,15 @@ def init_db():
             posted INTEGER DEFAULT 0
         )
     ''')
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS templates (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT,
+            subreddit TEXT,
+            title TEXT,
+            image_path TEXT
+        )
+    ''')
     conn.commit()
     conn.close()
 
@@ -36,6 +45,14 @@ def index():
 
 @app.route('/schedule', methods=['GET', 'POST'])
 def schedule():
+    conn = sqlite3.connect('posts.db')
+    c = conn.cursor()
+
+    # Get saved templates from the database
+    c.execute('SELECT * FROM templates')
+    templates = c.fetchall()
+    conn.close()
+
     if request.method == 'POST':
         account = request.form['account']
         subreddit = request.form['subreddit']
@@ -43,6 +60,9 @@ def schedule():
         image_path = request.form['image_path']
         scheduled_time = request.form['scheduled_time']
         
+        # Check if a template was selected
+        template_id = request.form.get('template_id')
+
         conn = sqlite3.connect('posts.db')
         c = conn.cursor()
         c.execute('''
@@ -52,7 +72,8 @@ def schedule():
         conn.commit()
         conn.close()
         return redirect('/')
-    return render_template('schedule.html')
+
+    return render_template('schedule.html', templates=templates)
 
 if __name__ == '__main__':
     app.run(debug=True)

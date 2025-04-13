@@ -1,23 +1,53 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Schedule Post</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule a Post</title>
 </head>
 <body>
-    <h2>Schedule a New Reddit Post</h2>
+    <h1>Schedule a Post</h1>
+
+    <!-- Form to schedule a post -->
     <form method="POST">
-        Account:<br>
-        <input type="text" name="account" required><br>
-        Subreddit:<br>
-        <input type="text" name="subreddit" required><br>
-        Title:<br>
-        <input type="text" name="title" required><br>
-        Image Path (local or hosted):<br>
-        <input type="text" name="image_path" required><br>
-        Scheduled Time (YYYY-MM-DD HH:MM):<br>
+        <!-- Account -->
+        <label for="account">Account:</label>
+        <input type="text" name="account" required><br><br>
+
+        <!-- Subreddit -->
+        <label for="subreddit">Subreddit:</label>
+        <input type="text" name="subreddit" required><br><br>
+
+        <!-- Title -->
+        <label for="title">Title:</label>
+        <input type="text" name="title" required><br><br>
+
+        <!-- Image Path -->
+        <label for="image_path">Image Path:</label>
+        <input type="text" name="image_path"><br><br>
+
+        <!-- Scheduled Time -->
+        <label for="scheduled_time">Scheduled Time:</label>
         <input type="text" name="scheduled_time" required><br><br>
+
+        <!-- Template Selection -->
+        <h3>Select a Template</h3>
+        {% if templates %}
+            {% for template in templates %}
+                <div>
+                    <input type="radio" id="template_{{ template[0] }}" name="template_id" value="{{ template[0] }}">
+                    <label for="template_{{ template[0] }}">
+                        <strong>{{ template[1] }}</strong> (r/{{ template[2] }}): {{ template[3] }}
+                    </label>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No templates available.</p>
+        {% endif %}
+        <br>
+
+        <!-- Submit Button -->
         <button type="submit">Schedule Post</button>
     </form>
-    <a href="/">Back</a>
 </body>
 </html>
